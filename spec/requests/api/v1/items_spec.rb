@@ -146,6 +146,13 @@ describe "Items API" do
     end 
     
     describe 'sad path testing' do 
+        it "tells you if you tried to retrieve an item that doesn't exist" do\
+            get "/api/v1/items/99"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+        end 
+
         it "doesn't let you create an item if you are missing data" do
             merch1id = create(:merchant).id
             item_params = ({
