@@ -55,7 +55,7 @@ describe "Items API" do
         expect(items[:data].count).to eq(0)
     end
 
-     it "sends a list of items" do
+     it "sends data for a single item" do
         merch1id = create(:merchant).id
 
         itemid = create(:item, merchant_id: merch1id).id
@@ -91,5 +91,27 @@ describe "Items API" do
 
         expect(item[:data][:attributes]).to_not have_key(:created_at)
         expect(item[:data][:attributes]).to_not have_key(:updated_at)
+    end
+
+    it "lets you create an item" do
+        merch1id = create(:merchant).id
+        item_params = ({
+                  name: 'Big wheel-o-cheese',
+                  description: 'Yellow and tasty',
+                  unit_price: 99.99,
+                  merchant_id: merch1id
+                })
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+        
+        created_item = Item.last
+
+        expect(response).to be_successful
+        
+        expect(created_item.name).to eq('Big wheel-o-cheese')
+        expect(created_item.description).to eq('Yellow and tasty')
+        expect(created_item.unit_price).to eq(99.99)
+        expect(created_item.merchant_id).to eq(merch1id)
     end
 end
