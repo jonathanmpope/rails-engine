@@ -33,6 +33,16 @@ class Api::V1::ItemsController < ApplicationController
         end 
     end 
 
+    def destroy 
+        if Item.exists?(params[:id])
+            item = Item.find(params[:id])
+            # item.destroy_all_invoices
+            item.destroy
+        else 
+            render status: 404
+        end 
+    end 
+
     private 
     def item_params
         params.require(:item).permit(:name, :description, :unit_price, :merchant_id)

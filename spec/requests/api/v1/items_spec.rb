@@ -149,7 +149,12 @@ describe "Items API" do
             item = create(:item, merchant_id: merch1id)
             previous_name = item.name 
 
-            item_params = { name: "Wheel-o-cheese" }
+            item_params = {
+                    name: 'Big wheel-o-cheese',
+                    description: 'Yellow and tasty',
+                    unit_price: 99.99,
+                    merchant_id: merch1id
+                    }
             headers = {"CONTENT_TYPE" => "application/json"}
 
             patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: item_params})
@@ -157,8 +162,49 @@ describe "Items API" do
             
             expect(response).to be_successful
             expect(updated_item.name).to_not eq(previous_name)
-            expect(updated_item.name).to eq("Wheel-o-cheese")
-        end 
+            expect(updated_item.name).to eq("Big wheel-o-cheese")
+
+            item = JSON.parse(response.body, symbolize_names: true)
+
+            expect(item).to have_key(:data)
+            expect(item[:data].class).to eq(Hash)
+
+            expect(item[:data]).to have_key(:id)
+            expect(item[:data][:id]).to be_a(String)
+
+            expect(item[:data]).to have_key(:type)
+            expect(item[:data][:type]).to eq("item")
+
+            expect(item[:data]).to have_key(:attributes)
+
+            expect(item[:data][:attributes]).to have_key(:name)
+            expect(item[:data][:attributes][:name]).to eq('Big wheel-o-cheese')
+
+            expect(item[:data][:attributes]).to have_key(:description)
+            expect(item[:data][:attributes][:description]).to eq('Yellow and tasty')
+                
+            expect(item[:data][:attributes]).to have_key(:unit_price)
+            expect(item[:data][:attributes][:unit_price]).to eq(99.99)
+
+            expect(item[:data][:attributes]).to have_key(:merchant_id)
+            expect(item[:data][:attributes][:merchant_id]).to eq(merch1id)
+
+            expect(item[:data][:attributes]).to_not have_key(:created_at)
+            expect(item[:data][:attributes]).to_not have_key(:updated_at)
+        end
+        
+        it "can destroy an item" do
+            merch1id = create(:merchant).id
+            item = create(:item, merchant_id: merch1id)
+
+            expect(Item.count).to eq(1)
+
+            delete "/api/v1/items/#{item.id}"
+
+            expect(response).to be_successful
+            expect(Item.count).to eq(0)
+            expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+        end
     end 
     
     describe 'sad path testing' do 
