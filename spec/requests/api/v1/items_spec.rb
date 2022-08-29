@@ -144,4 +144,39 @@ describe "Items API" do
             expect(item[:data][:attributes]).to_not have_key(:updated_at)
         end
     end 
+    
+    describe 'sad path testing' do 
+        it "doesn't let you create an item if you are missing data" do
+            merch1id = create(:merchant).id
+            item_params = ({
+                    name: 'Big wheel-o-cheese',
+                    unit_price: 99.99,
+                    merchant_id: merch1id
+                    })
+            headers = {"CONTENT_TYPE" => "application/json"}
+
+            post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+        end 
+
+        xit "let's you create  missing data" do
+            merch1id = create(:merchant).id
+            item_params = ({
+                    name: 'Big wheel-o-cheese',
+                    unit_price: 99.99,
+                    merchant_id: merch1id
+                    })
+            headers = {"CONTENT_TYPE" => "application/json"}
+
+            post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+
+            
+        end 
+    end 
+
 end
