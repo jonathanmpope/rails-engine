@@ -105,4 +105,13 @@ describe "Merchants API" do
             expect(merchant[:data][:attributes]).to_not have_key(:updated_at)
         end
     end 
+
+    describe 'sad path testing' do 
+        it "tells you if you tried to retrieve a merchant that doesn't exist" do\
+            get "/api/v1/merchants/99"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+        end 
+    end 
 end
