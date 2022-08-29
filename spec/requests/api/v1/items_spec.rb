@@ -161,10 +161,12 @@ describe "Items API" do
             expect(response.status).to eq(404) 
         end 
 
-        xit "let's you create  missing data" do
+        it "allows you to create an item with extra data" do
             merch1id = create(:merchant).id
             item_params = ({
                     name: 'Big wheel-o-cheese',
+                    description: 'Yellow and tasty',
+                    origin: 'milky way galaxy',
                     unit_price: 99.99,
                     merchant_id: merch1id
                     })
@@ -172,10 +174,15 @@ describe "Items API" do
 
             post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
-            expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response).to be_successful
+            expect(response.status).to eq(200) 
 
+            created_item = Item.last
             
+            expect(created_item.name).to eq('Big wheel-o-cheese')
+            expect(created_item.description).to eq('Yellow and tasty')
+            expect(created_item.unit_price).to eq(99.99)
+            expect(created_item.merchant_id).to eq(merch1id)
         end 
     end 
 
