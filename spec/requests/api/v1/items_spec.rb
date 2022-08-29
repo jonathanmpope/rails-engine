@@ -143,6 +143,22 @@ describe "Items API" do
             expect(item[:data][:attributes]).to_not have_key(:created_at)
             expect(item[:data][:attributes]).to_not have_key(:updated_at)
         end
+
+        it "lets you update an item" do
+            merch1id = create(:merchant).id
+            item = create(:item, merchant_id: merch1id)
+            previous_name = item.name 
+
+            item_params = { name: "Wheel-o-cheese" }
+            headers = {"CONTENT_TYPE" => "application/json"}
+
+            patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: item_params})
+            updated_item = Item.find_by(id: item.id)
+            
+            expect(response).to be_successful
+            expect(updated_item.name).to_not eq(previous_name)
+            expect(updated_item.name).to eq("Wheel-o-cheese")
+        end 
     end 
     
     describe 'sad path testing' do 
@@ -190,6 +206,38 @@ describe "Items API" do
             expect(created_item.description).to eq('Yellow and tasty')
             expect(created_item.unit_price).to eq(99.99)
             expect(created_item.merchant_id).to eq(merch1id)
+        end 
+
+        it "won't let you update an item without data" do
+            merch1id = create(:merchant).id
+            item = create(:item, merchant_id: merch1id)
+            previous_name = item.name 
+
+            item_params = { name: nil }
+            headers = {"CONTENT_TYPE" => "application/json"}
+
+            patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate({item: item_params})
+            updated_item = Item.find_by(id: item.id)
+        
+            expect(response).to_not be_successful
+            expect(updated_item.name).to eq(previous_name)
+            expect(updated_item.name).to_not eq(nil)
+        end 
+
+        it "won't let you try to update an item that doesn't exist" do
+            merch1id = create(:merchant).id
+            item = create(:item, merchant_id: merch1id)
+            previous_name = item.name 
+
+            item_params = { name: "hello" }
+            headers = {"CONTENT_TYPE" => "application/json"}
+
+            patch "/api/v1/items/99", headers: headers, params: JSON.generate({item: item_params})
+            updated_item = Item.find_by(id: item.id)
+        
+            expect(response).to_not be_successful
+            expect(updated_item.name).to eq(previous_name)
+            expect(updated_item.name).to_not eq(nil)
         end 
     end 
 
