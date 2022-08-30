@@ -44,4 +44,16 @@ describe "Merchants Items API" do
             end
         end 
     end
+
+    describe 'sad path testing' do 
+        it "sends a list of merchant items" do
+            get "/api/v1/merchants/99/items"
+
+            body = JSON.parse(response.body, symbolize_names: true)
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+            expect(body[:error]).to eq("Merchant does not exist!") 
+        end 
+    end
 end 
