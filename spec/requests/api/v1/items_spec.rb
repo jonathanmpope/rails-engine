@@ -502,6 +502,17 @@ describe "Items API" do
             expect(response).to_not be_successful
             expect(response.status).to eq(400) 
         end 
+
+        it "throws an error if you try make an invalid request for the item find api" do
+            merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
+            item1 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+    
+            get "/api/v1/items/find?min_price=-5"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(400) 
+            expect(response.body).to eq("{\"error\":\"Number cannot be negative\"}") 
+        end 
     end 
 
 end
