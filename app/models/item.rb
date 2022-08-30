@@ -27,13 +27,13 @@ class Item < ApplicationRecord
     end
     
     def self.find_by_max_price(price)
-        where(:unit_price >= price)
+        where("unit_price <= ?", price.to_f * 100)
         .order(:name)
         .first 
     end
 
-     def self.find_by_price_range(min, max)
-        where("unit_price ILIKE ?", "%#{price}%")
+    def self.find_by_price_range(min, max)
+        where("unit_price >= ? AND unit_price <= ?", min.to_f * 100, max.to_f * 100)
         .order(:name)
         .first 
     end
