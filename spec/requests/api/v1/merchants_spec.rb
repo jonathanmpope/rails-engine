@@ -106,16 +106,19 @@ describe "Merchants API" do
         end
 
         it "returns a list of merchants API (find_all)" do
-            create_list(:merchant, 3)
+            merchant1 = Merchant.create!(name: "K-MART", created_at: Time.now, updated_at: Time.now)
+            merchant2 = Merchant.create!(name: "Cheese Mart", created_at: Time.now, updated_at: Time.now)
+            merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
+            merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
 
-            get '/api/v1/merchants'
-
+            get "/api/v1/merchants/find_all?name=mart"
+            
             expect(response).to be_successful
 
             merchants = JSON.parse(response.body, symbolize_names: true)
-            
+             
             expect(merchants).to have_key(:data)
-            expect(merchants[:data].count).to eq(3)
+            expect(merchants[:data].count).to eq(2)
             expect(merchants[:data].class).to eq(Array)
 
             merchants[:data].each do |merchant|
@@ -133,6 +136,9 @@ describe "Merchants API" do
                 expect(merchant[:attributes]).to_not have_key(:created_at)
                 expect(merchant[:attributes]).to_not have_key(:updated_at)
             end
+
+            expect(merchants[:data][0][:attributes][:name]).to eq("K-MART")
+            expect(merchants[:data][1][:attributes][:name]).to eq("Cheese Mart")
         end
     end 
 

@@ -11,8 +11,16 @@ class Api::V1::MerchantsController < ApplicationController
         end 
     end 
 
-     def create
+    def create
         render json: MerchantSerializer.new(Merchant.create(merchant_params))
+    end
+    
+    def find_all
+        if params[:name] != nil && params[:name] != ''
+            render json: Merchant.find_by_name(params[:name])
+        else 
+            render status: 400
+        end 
     end 
 
     private 
