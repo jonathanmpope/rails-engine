@@ -511,7 +511,13 @@ describe "Items API" do
 
             expect(response).to_not be_successful
             expect(response.status).to eq(400) 
-            expect(response.body).to eq("{\"error\":\"Number cannot be negative\"}") 
+            expect(response.body).to eq("{\"error\":\"Number cannot be negative\"}")
+            
+            get "/api/v1/items/find?max_price=-500"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(400) 
+            expect(response.body).to eq("{\"error\":\"Number cannot be negative\"}")
         end 
     end 
 

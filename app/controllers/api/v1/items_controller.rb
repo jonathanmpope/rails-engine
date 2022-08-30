@@ -16,7 +16,7 @@ class Api::V1::ItemsController < ApplicationController
         if item.save
             render json: ItemSerializer.new(item), status: 201
         else 
-            render status: 404
+            render json: { error: "Item was not created" }, status: 404
         end 
     end 
 
@@ -26,7 +26,7 @@ class Api::V1::ItemsController < ApplicationController
             if item.update(item_params)
                 render json: ItemSerializer.new(item)
             else 
-                render status: 404
+                render json: { error: "Item was not updated" }, status: 404
             end 
         else 
             render status: 404

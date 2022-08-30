@@ -160,6 +160,11 @@ describe "Merchants API" do
             
             expect(response).to_not be_successful
             expect(response.status).to eq(400) 
+
+            get "/api/v1/merchants/find_all"
+            
+            expect(response).to_not be_successful
+            expect(response.status).to eq(400) 
          end 
 
          it "returns an empty array when no items match the search" do
