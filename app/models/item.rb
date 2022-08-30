@@ -43,4 +43,9 @@ class Item < ApplicationRecord
         items = where("unit_price >= ?", price.to_f )
         items == nil ?  { data: {} } :  ItemSerializer.new(items)
     end
+
+    def self.find_all_by_max_price(price)
+        items = where("unit_price <= ?", price.to_f)
+        items == nil ?  { data: {} } :  ItemSerializer.new(items)
+    end
 end 
