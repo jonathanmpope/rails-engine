@@ -24,5 +24,18 @@ RSpec.describe Item, type: :model do
         
         expect(Invoice.all).to eq([])
       end 
+
+      it "#self.find_by_name(name)" do
+          merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
+          item1 = Item.create!(name: "Watch", description: "Always a need to tell time", unit_price: 3000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
+          item2 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+          item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 2000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+          item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+
+          item = Item.find_by_name("acho")
+          name = JSON.parse(item.to_json, symbolize_names: true)[:data][:attributes][:name]
+
+          expect(name).to eq("Cheesey Nachos")
+      end 
   end
 end 
