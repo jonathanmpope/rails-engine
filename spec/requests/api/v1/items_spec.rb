@@ -469,6 +469,39 @@ describe "Items API" do
             expect(response).to_not be_successful
             expect(response.status).to eq(404) 
         end
+
+        it "throws an error if you try make an invalid request for the item find api" do
+            merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
+            item1 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+            item2 = Item.create!(name: "Computer", description: "Helpful for coding", unit_price: 80000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
+            item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 200, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+            item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 400, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+
+            get "/api/v1/items/find"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+
+            get "/api/v1/items/find?name="
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+
+            get "/api/v1/items/find?name=ring&min_price=50"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+
+            get "/api/v1/items/find?name=ring&max_price=50"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+
+            get "/api/v1/items/find?name=ring&min_price=50&max_price=250"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+        end 
     end 
 
 end

@@ -43,16 +43,16 @@ class Api::V1::ItemsController < ApplicationController
     end 
 
     def find 
-        if params[:name] != nil 
+        if params[:name] != nil && params[:name] != "" && params[:min_price] == nil && params[:max_price] == nil
             item = Item.find_by_name(params[:name])
             render json: ItemSerializer.new(item)
-        elsif params[:min_price] != nil && params[:max_price] == nil
+        elsif params[:min_price] != nil && params[:max_price] == nil && params[:name] == nil
             item = Item.find_by_min_price(params[:min_price])
             render json: ItemSerializer.new(item)
-        elsif params[:max_price] != nil && params[:min_price] == nil
+        elsif params[:max_price] != nil && params[:min_price] == nil && params[:name] == nil
             item = Item.find_by_max_price(params[:max_price])
             render json: ItemSerializer.new(item)
-        elsif params[:max_price] != nil && params[:min_price] != nil
+        elsif params[:max_price] != nil && params[:min_price] != nil && params[:name] == nil
             item = Item.find_by_price_range(params[:min_price], params[:max_price])
             render json: ItemSerializer.new(item)
         else 
