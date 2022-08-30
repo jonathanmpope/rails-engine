@@ -270,7 +270,7 @@ describe "Items API" do
             item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 200, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
             item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 400, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-            get "/api/v1/items/find?min_price=4.99"
+            get "/api/v1/items/find?min_price=499"
 
             expect(response).to be_successful
 
@@ -310,7 +310,7 @@ describe "Items API" do
             item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 200, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
             item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 400, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-            get "/api/v1/items/find?max_price=4.99"
+            get "/api/v1/items/find?max_price=499"
 
             expect(response).to be_successful
 
@@ -350,7 +350,7 @@ describe "Items API" do
             item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 200, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
             item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 400, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-            get "/api/v1/items/find?max_price=150&min_price=50"
+            get "/api/v1/items/find?max_price=15000&min_price=4500"
 
             expect(response).to be_successful
 
@@ -480,27 +480,27 @@ describe "Items API" do
             get "/api/v1/items/find"
 
             expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response.status).to eq(400) 
 
             get "/api/v1/items/find?name="
 
             expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response.status).to eq(400) 
 
             get "/api/v1/items/find?name=ring&min_price=50"
 
             expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response.status).to eq(400) 
 
             get "/api/v1/items/find?name=ring&max_price=50"
 
             expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response.status).to eq(400) 
 
             get "/api/v1/items/find?name=ring&min_price=50&max_price=250"
 
             expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response.status).to eq(400) 
         end 
     end 
 
