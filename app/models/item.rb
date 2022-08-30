@@ -33,4 +33,9 @@ class Item < ApplicationRecord
         item = where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f).order(:name).first 
         item == nil ?  { data: {} } :  ItemSerializer.new(item)
     end
+
+    def self.find_all_by_name(name)
+        items = where("name ILIKE ?", "%#{name}%") 
+        items == nil ?  { data: {} } :  ItemSerializer.new(items)
+    end
 end 
