@@ -263,14 +263,14 @@ describe "Items API" do
             expect(item[:data][:attributes]).to_not have_key(:updated_at)
         end
 
-        it "can find a single item which matches a search term - name" do
+        it "can find a single item based on min price" do
             merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
-            item1 = Item.create!(name: "Watch", description: "Always a need to tell time", unit_price: 3000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
-            item2 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
-            item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 2000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
-            item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+            item1 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 500, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+            item2 = Item.create!(name: "Computer", description: "Helpful for coding", unit_price: 8000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
+            item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 200, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+            item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 400, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-            get "/api/v1/items/find?name=cheese"
+            get "/api/v1/items/find?min_price=4.99"
 
             expect(response).to be_successful
 
@@ -288,13 +288,13 @@ describe "Items API" do
             expect(item[:data]).to have_key(:attributes)
 
             expect(item[:data][:attributes]).to have_key(:name)
-            expect(item[:data][:attributes][:name]).to eq(item3.name)
+            expect(item[:data][:attributes][:name]).to eq(item2.name)
 
             expect(item[:data][:attributes]).to have_key(:description)
-            expect(item[:data][:attributes][:description]).to eq(item3.description)
+            expect(item[:data][:attributes][:description]).to eq(item2.description)
                 
             expect(item[:data][:attributes]).to have_key(:unit_price)
-            expect(item[:data][:attributes][:unit_price]).to eq(item3.unit_price)
+            expect(item[:data][:attributes][:unit_price]).to eq(item2.unit_price)
 
             expect(item[:data][:attributes]).to have_key(:merchant_id)
             expect(item[:data][:attributes][:merchant_id]).to be_a(Integer)
