@@ -261,7 +261,7 @@ describe "Items API" do
             post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
             expect(response).to be_successful
-            expect(response.status).to eq(200) 
+            expect(response.status).to eq(201) 
 
             created_item = Item.last
             
