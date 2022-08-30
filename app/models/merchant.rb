@@ -7,4 +7,9 @@ class Merchant < ApplicationRecord
         merchants = where("name ILIKE ?", "%#{name}%")
         merchants == nil ?  { data: {} } :  MerchantSerializer.new(merchants)
     end
+
+     def self.find_one_by_name(name)
+        merchant = where("name ILIKE ?", "%#{name}%").order(:name).first
+        merchant == nil ?  { data: {} } :  MerchantSerializer.new(merchant)
+    end
 end 

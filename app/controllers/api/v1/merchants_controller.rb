@@ -23,6 +23,14 @@ class Api::V1::MerchantsController < ApplicationController
         end 
     end 
 
+    def find
+        if params[:name] != nil && params[:name] != ''
+            render json: Merchant.find_one_by_name(params[:name])
+        else 
+            render status: 400
+        end 
+    end
+
     private 
     def merchant_params
         params.require(:merchant).permit(:name)
