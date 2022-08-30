@@ -204,6 +204,23 @@ describe "Items API" do
             expect(response).to be_successful
             expect(Item.count).to eq(0)
             expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect(response.status).to eq(204) 
+        end
+
+         it "can destroy an item and an invoice if it's the only item" do
+            merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
+            customer = Customer.create!(first_name: "John", last_name: "Smith", created_at: Time.now, updated_at: Time.now)
+            invoice = Invoice.create!(status: :completed, created_at: "2022-07-28 09:54:09 UTC", updated_at: Time.now, customer_id: customer.id )
+            item = Item.create!(name: "Watch", description: "Always a need to tell time", unit_price: 3000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
+            invoice_item = InvoiceItem.create!(item_id: item.id, invoice_id: invoice.id, quantity: 1, unit_price: item.unit_price, created_at: Time.now, updated_at: Time.now)
+
+            delete "/api/v1/items/#{item.id}"
+
+            expect(response).to be_successful
+            expect(Item.count).to eq(0)
+            expect(Invoice.count).to eq(0)
+            expect{Invoice.find(invoice.id)}.to raise_error(ActiveRecord::RecordNotFound)
+            expect(response.status).to eq(204) 
         end
     end 
     
@@ -285,6 +302,13 @@ describe "Items API" do
             expect(updated_item.name).to eq(previous_name)
             expect(updated_item.name).to_not eq(nil)
         end 
+
+        it "throws an error if you try to destroy an item that doesn't exist" do
+            delete "/api/v1/items/99"
+
+            expect(response).to_not be_successful
+            expect(response.status).to eq(404) 
+        end
     end 
 
 end
