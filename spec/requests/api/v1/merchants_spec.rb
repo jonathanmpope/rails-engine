@@ -149,5 +149,33 @@ describe "Merchants API" do
             expect(response).to_not be_successful
             expect(response.status).to eq(404) 
         end 
+
+         it "returns an error when not passing info in the name search" do
+            merchant1 = Merchant.create!(name: "K-MART", created_at: Time.now, updated_at: Time.now)
+            merchant2 = Merchant.create!(name: "Cheese Mart", created_at: Time.now, updated_at: Time.now)
+            merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
+            merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
+
+            get "/api/v1/merchants/find_all?name="
+            
+            expect(response).to_not be_successful
+            expect(response.status).to eq(400) 
+         end 
+
+         it "returns an empty array when no items match the search" do
+            merchant1 = Merchant.create!(name: "K-MART", created_at: Time.now, updated_at: Time.now)
+            merchant2 = Merchant.create!(name: "Cheese Mart", created_at: Time.now, updated_at: Time.now)
+            merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
+            merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
+
+            get "/api/v1/merchants/find_all?name=abcdefghij"
+            
+            expect(response).to be_successful
+            
+            merchants = JSON.parse(response.body, symbolize_names: true)
+
+            expect(merchants).to have_key(:data)
+            expect(merchants[:data].count).to eq(0) 
+         end 
     end 
 end
