@@ -42,6 +42,24 @@ class Api::V1::ItemsController < ApplicationController
         end 
     end 
 
+    def find 
+        if params[:name] != nil 
+            item = Item.find_by_name(params[:name])
+            render json: ItemSerializer.new(item)
+        elsif params[:min_price] != nil && params[:max_price] == nil
+            item = Item.find_by_min_price(params[:min_price])
+            render json: ItemSerializer.new(item)
+        elsif params[:max_price] != nil && params[:min_price] == nil
+            item = Item.find_by_max_price(params[:max_price])
+            render json: ItemSerializer.new(item)
+        elsif params[:max_price] != nil && params[:min_price] != nil
+            item = Item.find_by_price_range(params[:min_price], params[:max_price])
+            render json: ItemSerializer.new(item)
+        else 
+            render status: 404
+        end 
+    end 
+
     private 
     def item_params
         params.require(:item).permit(:name, :description, :unit_price, :merchant_id)

@@ -13,4 +13,28 @@ class Item < ApplicationRecord
     def destroy_all_invoices_with_only_one_item
         invoices.each { |invoice| invoice.items.count == 1 ? invoice.destroy : nil }
     end 
+
+    def self.find_by_name(name)
+        where("name ILIKE ?", "%#{name}%")
+        .order(:name)
+        .first 
+    end 
+
+    def self.find_by_min_price(price)
+        where("unit_price ILIKE ?", "%#{price}%")
+        .order(:name)
+        .first 
+    end
+    
+    def self.find_by_max_price(price)
+        where("unit_price ILIKE ?", "%#{price}%")
+        .order(:name)
+        .first 
+    end
+
+     def self.find_by_price_range(min, max)
+        where("unit_price ILIKE ?", "%#{price}%")
+        .order(:name)
+        .first 
+    end
 end 
