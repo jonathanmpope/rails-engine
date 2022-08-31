@@ -18,6 +18,10 @@ class Item < ApplicationRecord
         where("name ILIKE ?", "%#{name}%").order(:name).first 
     end 
 
+    def self.find_one_by_price(min, max)
+        where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f).order(:name).first 
+    end
+
     def self.find_by_min_price(price)
         item = where("unit_price >= ?", price.to_f ).order(:name).first 
         item == nil ?  { data: {} } :  ItemSerializer.new(item)
