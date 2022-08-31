@@ -514,7 +514,7 @@ describe "Items API" do
             post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
 
             expect(response).to_not be_successful
-            expect(response.status).to eq(404) 
+            expect(response.status).to eq(422) 
         end 
 
         it "allows you to create an item with extra data" do

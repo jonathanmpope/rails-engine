@@ -1,23 +1,26 @@
 class Api::V1::ItemsController < ApplicationController
     def index 
-        render json: ItemSerializer.new(Item.all)
+        # render json: ItemSerializer.new(Item.all)
+        json_response(ItemSerializer.new(Item.all), 200)
     end 
 
      def show 
-        if Item.exists?(params[:id]) 
-            render json: ItemSerializer.new(Item.find(params[:id]))
-        else 
-            render status: 404
-        end 
+        # if Item.exists?(params[:id]) 
+        #     render json: ItemSerializer.new(Item.find(params[:id]))
+        # else 
+        #     render status: 404
+        # end 
+        json_response(ItemSerializer.new(Item.find(params[:id])), 200)
     end 
 
     def create
-        item = Item.new(item_params)
-        if item.save
-            render json: ItemSerializer.new(item), status: 201
-        else 
-            render json: { error: "Item was not created" }, status: 404
-        end 
+        # item = Item.new(item_params)
+        # if item.save
+        #     render json: ItemSerializer.new(item), status: 201
+        # else 
+        #     render json: { error: "Item was not created" }, status: 404
+        # end 
+        json_response(ItemSerializer.new(Item.create(item_params)), 201)
     end 
 
     def update 
