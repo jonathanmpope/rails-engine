@@ -37,43 +37,40 @@ RSpec.describe Item, type: :model do
           expect(item.name).to eq("Cheesey Nachos")
       end 
 
-      it "#self.find_by_min_price(price)" do
+      it "#self.find_one_by_price(price) - min only" do
           merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
           item1 = Item.create!(name: "Watch", description: "Always a need to tell time", unit_price: 3000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
           item2 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
           item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 2000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
           item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-          item = Item.find_by_min_price(4500)
-          name = JSON.parse(item.to_json, symbolize_names: true)[:data][:attributes][:name]
+          item = Item.find_one_by_price(4500, Float::INFINITY)
 
-          expect(name).to eq("Goat Cheese")
+          expect(item.name).to eq("Goat Cheese")
       end 
 
-      it "#self.find_by_max_price(price)" do
+      it "#self.find_one_by_price(price)- max only" do
           merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
           item1 = Item.create!(name: "Watch", description: "Always a need to tell time", unit_price: 3000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
           item2 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
           item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 2000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
           item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-          item = Item.find_by_max_price(2900)
-          name = JSON.parse(item.to_json, symbolize_names: true)[:data][:attributes][:name]
+          item = Item.find_one_by_price(0, 2900)
 
-          expect(name).to eq("American Cheese")
+          expect(item.name).to eq("American Cheese")
       end 
 
-      it "#self.find_by_price_range(min, max)" do
+      it "#self.find_one_by_price(price) - range" do
           merchant = Merchant.create!(name: "Schroeder-Jerde", created_at: Time.now, updated_at: Time.now)
           item1 = Item.create!(name: "Watch", description: "Always a need to tell time", unit_price: 3000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)   
           item2 = Item.create!(name: "Goat Cheese", description: "Pretty solid on eggs", unit_price: 5000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
           item3 = Item.create!(name: "American Cheese", description: "Gross", unit_price: 2000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
           item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
-          item = Item.find_by_price_range(3200, 5500)
-          name = JSON.parse(item.to_json, symbolize_names: true)[:data][:attributes][:name]
+          item = Item.find_one_by_price(3200, 5500)
 
-          expect(name).to eq("Cheesey Nachos")
+          expect(item.name).to eq("Cheesey Nachos")
       end 
 
       it "#self.find_all_by_name(name)" do
