@@ -23,23 +23,10 @@ class Item < ApplicationRecord
     end
 
     def self.find_all_by_name(name)
-        # items = 
         where("name ILIKE ?", "%#{name}%") 
-        # items == nil ?  { data: {} } :  ItemSerializer.new(items)
     end
 
-    def self.find_all_by_min_price(price)
-        items = where("unit_price >= ?", price.to_f )
-        items == nil ?  { data: {} } :  ItemSerializer.new(items)
-    end
-
-    def self.find_all_by_max_price(price)
-        items = where("unit_price <= ?", price.to_f)
-        items == nil ?  { data: {} } :  ItemSerializer.new(items)
-    end
-
-    def self.find_all_by_price_range(min, max)
-        items = where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f)
-        items == nil ?  { data: {} } :  ItemSerializer.new(items)
+    def self.find_all_by_price(min, max)
+        where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f)
     end
 end 
