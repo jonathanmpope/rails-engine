@@ -20,7 +20,7 @@ class Api::V1::ItemsController < ApplicationController
         # else 
         #     render json: { error: "Item was not created" }, status: 404
         # end 
-        json_response(ItemSerializer.new(Item.create(item_params)), 201)
+        json_response(ItemSerializer.new(Item.create!(item_params)), 201)
     end 
 
     def update 
