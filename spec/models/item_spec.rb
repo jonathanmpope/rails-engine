@@ -33,9 +33,8 @@ RSpec.describe Item, type: :model do
           item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
           item = Item.find_by_name("acho")
-          name = JSON.parse(item.to_json, symbolize_names: true)[:data][:attributes][:name]
 
-          expect(name).to eq("Cheesey Nachos")
+          expect(item.name).to eq("Cheesey Nachos")
       end 
 
       it "#self.find_by_min_price(price)" do

@@ -25,5 +25,4 @@ class Api::V1::Merchants::SearchController < ApplicationController
             render status: 400
         end 
     end
-
 end 

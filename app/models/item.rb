@@ -15,8 +15,7 @@ class Item < ApplicationRecord
     end 
 
     def self.find_by_name(name)
-        item = where("name ILIKE ?", "%#{name}%").order(:name).first 
-        item == nil ? { data: {} } : ItemSerializer.new(item)
+        where("name ILIKE ?", "%#{name}%").order(:name).first 
     end 
 
     def self.find_by_min_price(price)

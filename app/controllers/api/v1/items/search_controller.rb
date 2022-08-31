@@ -2,7 +2,8 @@ class Api::V1::Items::SearchController < ApplicationController
 
     def find 
         if params[:name] != nil && params[:name] != "" && params[:min_price] == nil && params[:max_price] == nil
-            render json: Item.find_by_name(params[:name])
+            # render json: Item.find_by_name(params[:name])
+            find_one_name_search(params[:name])
         elsif params[:min_price] != nil && params[:min_price].to_f >= 0 && params[:max_price] == nil && params[:name] == nil && params[:min_price] != ''
             render json: Item.find_by_min_price(params[:min_price])
         elsif params[:max_price] != nil && params[:max_price].to_f >= 0 && params[:min_price] == nil && params[:name] == nil && params[:max_price] != ''
@@ -13,6 +14,15 @@ class Api::V1::Items::SearchController < ApplicationController
             render json: { error: "Number cannot be negative" }, status: 400 
         else 
             render status: 400
+        end 
+    end 
+
+    def find_one_name_search(name)
+        item = Item.find_by_name(name)
+        if item == nil 
+            render json: { data: {} }
+        else
+            render json: ItemSerializer.new(item) 
         end 
     end 
 
