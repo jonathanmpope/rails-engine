@@ -81,11 +81,10 @@ RSpec.describe Item, type: :model do
           item4 = Item.create!(name: "Cheesey Nachos", description: "Classic", unit_price: 4000, merchant_id: merchant.id, created_at: Time.now, updated_at: Time.now)
 
           items = Item.find_all_by_name("cheese")
-          data = JSON.parse(items.to_json, symbolize_names: true)
          
-          expect(data[:data].count).to eq(2)
-          expect(data[:data][0][:attributes][:name]).to eq("Goat Cheese")
-          expect(data[:data][1][:attributes][:name]).to eq("Cheesey Nachos")
+          expect(items.count).to eq(2)
+          expect(items[0].name).to eq("Goat Cheese")
+          expect(items[1].name).to eq("Cheesey Nachos")
       end 
 
       it "#self.find_all_by_min_price(price)" do

@@ -23,8 +23,9 @@ class Item < ApplicationRecord
     end
 
     def self.find_all_by_name(name)
-        items = where("name ILIKE ?", "%#{name}%") 
-        items == nil ?  { data: {} } :  ItemSerializer.new(items)
+        # items = 
+        where("name ILIKE ?", "%#{name}%") 
+        # items == nil ?  { data: {} } :  ItemSerializer.new(items)
     end
 
     def self.find_all_by_min_price(price)
