@@ -15,7 +15,12 @@ class Api::V1::Merchants::SearchController < ApplicationController
 
     def find
         if params[:name] != nil && params[:name] != ''
-            render json: Merchant.find_one_by_name(params[:name])
+            merchant = Merchant.find_one_by_name(params[:name])
+             if merchant == nil  
+                render json: { data: {} } 
+            else 
+                render json: MerchantSerializer.new(merchant)
+            end 
         else 
             render status: 400
         end 

@@ -8,7 +8,6 @@ class Merchant < ApplicationRecord
     end
 
      def self.find_one_by_name(name)
-        merchant = where("name ILIKE ?", "%#{name}%").order(:name).first
-        merchant == nil ?  { data: {} } :  MerchantSerializer.new(merchant)
+        where("name ILIKE ?", "%#{name}%").order(:name).first
     end
 end 

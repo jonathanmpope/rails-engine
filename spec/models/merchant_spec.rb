@@ -16,10 +16,9 @@ RSpec.describe Merchant, type: :model do
       merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
       merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
 
-      merchants = Merchant.find_one_by_name("mart")
-      data = JSON.parse(merchants.to_json, symbolize_names: true)
+      merchant = Merchant.find_one_by_name("mart")
      
-      expect(data[:data][:attributes][:name]).to eq("Cheese Mart")
+      expect(merchant[:name]).to eq("Cheese Mart")
     end 
 
     it "#self.find_all_by_name(name)" do
