@@ -27,7 +27,7 @@ class Api::V1::Items::SearchController < ApplicationController
     end 
 
      def find_all  
-        if params[:name] != nil && params[:name] != "" && params[:min_price] == nil && params[:max_price] == nil
+        if [nil, ""].exclude?(params[:name]) && params[:min_price] == nil && params[:max_price] == nil
              find_all_name_search(params[:name])
         elsif params[:min_price] != nil && params[:min_price].to_f >= 0 && params[:max_price] == nil && params[:name] == nil && params[:min_price] != ''
             find_all_price_search(params[:min_price])
