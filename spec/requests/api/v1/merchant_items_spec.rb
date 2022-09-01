@@ -43,10 +43,23 @@ describe "Merchants Items API" do
                 expect(item[:attributes]).to_not have_key(:updated_at)
             end
         end 
+
+        it "sends a an empty list if there are no items" do
+            merch1id = create(:merchant).id
+
+            get "/api/v1/merchants/#{merch1id}/items"
+
+            expect(response).to be_successful
+            
+            items = JSON.parse(response.body, symbolize_names: true)
+            
+            expect(items).to have_key(:data)
+            expect(items[:data].count).to eq(0)
+        end 
     end
 
     describe 'sad path testing' do 
-        it "sends a list of merchant items" do
+        it "return an error if you request a merchant that doesn't exist" do
             get "/api/v1/merchants/99/items"
 
             body = JSON.parse(response.body, symbolize_names: true)

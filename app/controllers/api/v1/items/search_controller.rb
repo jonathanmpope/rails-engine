@@ -18,20 +18,12 @@ class Api::V1::Items::SearchController < ApplicationController
 
     def find_one_name_search(name)
         item = Item.find_by_name(name)
-        if item == nil 
-            render json: { data: {} }
-        else
-            render json: ItemSerializer.new(item) 
-        end 
+        item == nil ? (render json: { data: {} }) : (render json: ItemSerializer.new(item))
     end 
 
     def find_one_price_search(min = 0, max = Float::INFINITY)
         item = Item.find_one_by_price(min, max)
-        if item == nil 
-            render json: { data: {} }
-        else
-            render json: ItemSerializer.new(item) 
-        end 
+        item == nil ? (render json: { data: {} }) : (render json: ItemSerializer.new(item))
     end 
 
      def find_all  
@@ -52,20 +44,11 @@ class Api::V1::Items::SearchController < ApplicationController
 
     def find_all_name_search(name)
         items = Item.find_all_by_name(name)
-        if items == nil 
-            render json: { data: {} }
-        else
-            render json: ItemSerializer.new(items) 
-        end 
+        items == nil ? (render json: { data: {} }) : (render json: ItemSerializer.new(items))
     end 
 
-     def find_all_price_search(min, max = Float::INFINITY)
+     def find_all_price_search(min = 0, max = Float::INFINITY)
         items = Item.find_all_by_price(min, max)
-        if items == nil 
-            render json: { data: {} }
-        else
-            render json: ItemSerializer.new(items) 
-        end 
+        items == nil ? (render json: { data: {} }) : (render json: ItemSerializer.new(items))
     end 
-
 end 
