@@ -4,7 +4,10 @@ class Merchant < ApplicationRecord
     validates_presence_of :name
 
     def self.find_by_name(name)
-        merchants = where("name ILIKE ?", "%#{name}%")
-        merchants == nil ?  { data: {} } :  MerchantSerializer.new(merchants)
+       where("name ILIKE ?", "%#{name}%")
+    end
+
+     def self.find_one_by_name(name)
+        where("name ILIKE ?", "%#{name}%").order(:name).first
     end
 end 

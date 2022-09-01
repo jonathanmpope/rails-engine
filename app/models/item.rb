@@ -15,28 +15,18 @@ class Item < ApplicationRecord
     end 
 
     def self.find_by_name(name)
-        item = where("name ILIKE ?", "%#{name}%")
-        .order(:name)
-        .first 
-        item == nil ?  { data: {} } :  ItemSerializer.new(item)
+        where("name ILIKE ?", "%#{name}%").order(:name).first 
     end 
 
-    def self.find_by_min_price(price)
-        item = where("unit_price >= ?", price.to_f ).order(:name).first 
-        item == nil ?  { data: {} } :  ItemSerializer.new(item)
-    end
-    
-    def self.find_by_max_price(price)
-        item = where("unit_price <= ?", price.to_f)
-        .order(:name)
-        .first 
-        item == nil ?  { data: {} } :  ItemSerializer.new(item)
+    def self.find_one_by_price(min, max)
+        where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f).order(:name).first 
     end
 
-    def self.find_by_price_range(min, max)
-        item = where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f)
-        .order(:name)
-        .first 
-        item == nil ?  { data: {} } :  ItemSerializer.new(item)
+    def self.find_all_by_name(name)
+        where("name ILIKE ?", "%#{name}%") 
+    end
+
+    def self.find_all_by_price(min, max)
+        where("unit_price >= ? AND unit_price <= ?", min.to_f, max.to_f)
     end
 end 

@@ -104,42 +104,6 @@ describe "Merchants API" do
             expect(merchant[:data][:attributes]).to_not have_key(:created_at)
             expect(merchant[:data][:attributes]).to_not have_key(:updated_at)
         end
-
-        it "returns a list of merchants API (find_all)" do
-            merchant1 = Merchant.create!(name: "K-MART", created_at: Time.now, updated_at: Time.now)
-            merchant2 = Merchant.create!(name: "Cheese Mart", created_at: Time.now, updated_at: Time.now)
-            merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
-            merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
-
-            get "/api/v1/merchants/find_all?name=mart"
-            
-            expect(response).to be_successful
-
-            merchants = JSON.parse(response.body, symbolize_names: true)
-             
-            expect(merchants).to have_key(:data)
-            expect(merchants[:data].count).to eq(2)
-            expect(merchants[:data].class).to eq(Array)
-
-            merchants[:data].each do |merchant|
-                expect(merchant).to have_key(:id)
-                expect(merchant[:id]).to be_a(String)
-
-                expect(merchant).to have_key(:type)
-                expect(merchant[:type]).to eq("merchant")
-
-                expect(merchant).to have_key(:attributes)
-
-                expect(merchant[:attributes]).to have_key(:name)
-                expect(merchant[:attributes][:name]).to be_a(String)
-
-                expect(merchant[:attributes]).to_not have_key(:created_at)
-                expect(merchant[:attributes]).to_not have_key(:updated_at)
-            end
-
-            expect(merchants[:data][0][:attributes][:name]).to eq("K-MART")
-            expect(merchants[:data][1][:attributes][:name]).to eq("Cheese Mart")
-        end
     end 
 
     describe 'sad path testing' do 
@@ -148,34 +112,6 @@ describe "Merchants API" do
 
             expect(response).to_not be_successful
             expect(response.status).to eq(404) 
-        end 
-
-         it "returns an error when not passing info in the name search" do
-            merchant1 = Merchant.create!(name: "K-MART", created_at: Time.now, updated_at: Time.now)
-            merchant2 = Merchant.create!(name: "Cheese Mart", created_at: Time.now, updated_at: Time.now)
-            merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
-            merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
-
-            get "/api/v1/merchants/find_all?name="
-            
-            expect(response).to_not be_successful
-            expect(response.status).to eq(400) 
-         end 
-
-         it "returns an empty array when no items match the search" do
-            merchant1 = Merchant.create!(name: "K-MART", created_at: Time.now, updated_at: Time.now)
-            merchant2 = Merchant.create!(name: "Cheese Mart", created_at: Time.now, updated_at: Time.now)
-            merchant3 = Merchant.create!(name: "Bob's Shoes", created_at: Time.now, updated_at: Time.now)
-            merchant4 = Merchant.create!(name: "Adventure Shop", created_at: Time.now, updated_at: Time.now)
-
-            get "/api/v1/merchants/find_all?name=abcdefghij"
-            
-            expect(response).to be_successful
-            
-            merchants = JSON.parse(response.body, symbolize_names: true)
-
-            expect(merchants).to have_key(:data)
-            expect(merchants[:data].count).to eq(0) 
-         end 
+        end   
     end 
 end
