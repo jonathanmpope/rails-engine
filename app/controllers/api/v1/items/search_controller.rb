@@ -25,7 +25,7 @@ class Api::V1::Items::SearchController < ApplicationController
         end 
     end 
 
-    def find_one_price_search(min, max = Float::INFINITY)
+    def find_one_price_search(min = 0, max = Float::INFINITY)
         item = Item.find_one_by_price(min, max)
         if item == nil 
             render json: { data: {} }
